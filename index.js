@@ -19,9 +19,9 @@ Config.findOne({ active: true})
     } else {
       console.log('Konfiguration:');
       console.log(config);
-      const themen  = config.themen; // können substrings sein, case-insensitive – [ 'bliga' ]
-      const separat = config.separat; // separat auszuweisende urteile      – [ '5A_43/2018' ] (13.2.18)
-      const emailAn = config.email.join(', '); // auch mehrere möglich: 'test@qq.com, test@sohu.com, test@163.com'
+      const themen  = config.themen; // können substrings sein, case-insensitive
+      const separat = config.separat; // separat auszuweisende urteile
+      const emailAn = config.email.join(', '); // mehrere möglich: 'a@b.com, test@bla.ch'
       const startURL = 'https://www.bger.ch/ext/eurospider/live/de/php/aza/http/index_aza.php?lang=de&mode=index&search=false';
 
       request(startURL, (error, response, body) => {
