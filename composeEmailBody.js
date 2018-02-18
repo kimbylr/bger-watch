@@ -1,14 +1,20 @@
-composeEmailBody = ( themen, entscheide_separat, entscheide_interessant, entscheide_restliche ) => {
+const Config = require('./dbmodels').Config;
+
+
+composeEmailBody = ( config, themen, entscheide_separat, entscheide_interessant, entscheide_restliche ) => {
   // (1) separat auszuweisende urteile
   let emailBody = '';
   if ( entscheide_separat.length > 0 ) {
     entscheide_separat.forEach( ({ nr, thema, leitentscheid, beschreibung }) => {
-      emailBody = emailBody + `<strong>=== many wait for, such has appeared ===</strong><br/><br/><strong><a href="https://bger.li/${nr}">${nr}</a>: ${thema}</strong>
+      emailBody = emailBody + `<strong>=== erwartete Urteile ===</strong><br/><br/><strong><a href="https://bger.li/${nr}">${nr}</a>: ${thema}</strong>
       ${ leitentscheid ? ' <span style=\"color: red\">(Leitentscheid)</span>' : '' }
       <br/>${beschreibung}
       <br/><br/><br/>`
 
-      // TODO: aus config löschen
+      // aus config löschen (in separat_archiv verschieben)
+      config.archiveSeparat( nr, (error, result) => {
+        if ( error ) console.log(error);
+      });
     });
   }
 
