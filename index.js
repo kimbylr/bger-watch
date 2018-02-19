@@ -10,7 +10,10 @@ const Day = require('./dbmodels').Day;
 const Config = require('./dbmodels').Config;
 
 const composeEmailBody = require('./composeEmailBody');
-
+const returnRegExOrFalse = array => {
+  if ( array.length === 0 ) return false;
+  else return new RegExp( array.join('|'), 'i');
+}
 
 Config.findOne({ active: true})
   .then( config => {
@@ -19,8 +22,13 @@ Config.findOne({ active: true})
     } else {
       console.log('Konfiguration:');
       console.log(config);
-      const themen  = config.themen; // können substrings sein, case-insensitive
+
       const separat = config.separat; // separat auszuweisende urteile
+      const regEx_separat = returnRegExOrFalse(separat)
+
+      const themen  = config.themen; // können substrings sein, case-insensitive
+      const regEx_themen = returnRegExOrFalse(themen)
+
       const emailAn = config.email.join(', '); // mehrere möglich: 'a@b.com, test@bla.ch'
       const startURL = 'https://www.bger.ch/ext/eurospider/live/de/php/aza/http/index_aza.php?lang=de&mode=index&search=false';
 
@@ -83,15 +91,12 @@ Config.findOne({ active: true})
                         thema
                       }
 
-                      // handelt es sich um ein separat auszuweisendes urteil?
-                      if( (new RegExp( separat.join('|'), 'i' ) ).test(entscheidNr) ){
+                      // urteile in 3 "interessenstufen" einsortieren
+                      if ( regEx_separat && regEx_separat.test(entscheidNr) ) { // (1) urteil erwartet -> separat ausweisen
                         entscheide_separat.push(entscheid);
-                      }
-
-                      // ist das thema von interesse?
-                      if( (new RegExp( themen.join('|'), 'i' ) ).test(thema) ){
+                      } else if ( regEx_themen && regEx_themen.test(thema) ) { // (2) thema von interesse
                         entscheide_interessant.push(entscheid);
-                      } else {
+                      } else { // (3) restliche urteile
                         entscheide_restliche.push(entscheid);
                       }
                     }

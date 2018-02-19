@@ -5,17 +5,24 @@ composeEmailBody = ( config, themen, entscheide_separat, entscheide_interessant,
   // (1) separat auszuweisende urteile
   let emailBody = '';
   if ( entscheide_separat.length > 0 ) {
+    let archivieren = [];
+    emailBody = emailBody + `<strong>=== erwartete Urteile ===</strong><br/><br/>`;
     entscheide_separat.forEach( ({ nr, thema, leitentscheid, beschreibung }) => {
-      emailBody = emailBody + `<strong>=== erwartete Urteile ===</strong><br/><br/><strong><a href="https://bger.li/${nr}">${nr}</a>: ${thema}</strong>
+      emailBody = emailBody + `<strong><a href="https://bger.li/${nr}">${nr}</a>: ${thema}</strong>
       ${ leitentscheid ? ' <span style=\"color: red\">(Leitentscheid)</span>' : '' }
       <br/>${beschreibung}
-      <br/><br/><br/>`
-
-      // aus config löschen (in separat_archiv verschieben)
-      config.archiveSeparat( nr, (error, result) => {
-        if ( error ) console.log(error);
-      });
+      <br/><br/>`
+      archivieren.push(nr);
     });
+
+    // aus config löschen (in separat_archiv verschieben)
+    config.archiveSeparat( archivieren, (error, result) => {
+      if ( error ) console.log(error);
+    });
+  }
+
+  if ( emailBody !== '' ) { // nur wenn separat auszuweisende urteile vorhanden
+    emailBody = emailBody + '<br/><br/><br/>';
   }
 
   // (2) gewählte themen

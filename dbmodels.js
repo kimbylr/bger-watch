@@ -33,13 +33,12 @@ const ConfigSchema = new mongoose.Schema({
   separat_archiv: []
 })
 
-ConfigSchema.method('archiveSeparat', function(entscheidNr, callback) {
+ConfigSchema.method('archiveSeparat', function(archivieren, callback) {
   const separat = this.separat.filter( nr => {
-    if ( nr === entscheidNr ) return false;
+    if ( archivieren.indexOf(nr) >= 0 ) return false;
     return true;
   })
-  let separat_archiv = [...this.separat_archiv];
-  separat_archiv.push(entscheidNr);
+  const separat_archiv = [...this.separat_archiv].concat(archivieren);
   Object.assign(
     this,
     { separat: [...separat] },
