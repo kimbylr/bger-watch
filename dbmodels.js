@@ -7,6 +7,12 @@ const LogSchema = new mongoose.Schema({
   gefundene_tage: []
 });
 
+const MailLogSchema = new mongoose.Schema({
+  timestamp: { type: Date, default: Date.now },
+  error: String,
+  reply: String
+});
+
 const DaySchema = new mongoose.Schema({
   datum: String,
   url: String,
@@ -48,9 +54,11 @@ ConfigSchema.method('archiveSeparat', function(archivieren, callback) {
 });
 
 const Log = mongoose.model('Log', LogSchema);
+const MailLog = mongoose.model('MailLog', MailLogSchema);
 const Day = mongoose.model('Day', DaySchema);
 const Config = mongoose.model('Config', ConfigSchema);
 
 module.exports.Log = Log;
+module.exports.MailLog = MailLog;
 module.exports.Day = Day;
 module.exports.Config = Config;

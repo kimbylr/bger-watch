@@ -6,6 +6,7 @@ const sendmail = require('sendmail')();
 
 const db = require('./db');
 const Log = require('./dbmodels').Log;
+const MailLog = require('./dbmodels').MailLog;
 const Day = require('./dbmodels').Day;
 const Config = require('./dbmodels').Config;
 
@@ -110,11 +111,18 @@ Config.findOne({ active: true})
                       subject: `Neue BGer-Urteile vom ${tagesliste[durchgang].datum}`,
                       html: emailBody,
                     }, (err, reply) => {
-                      console.log(err && err.stack);
+                      console.log(err && error.stack);
                       console.dir(reply);
+
+                      // MailLog in DB schreiben
+                      let error = 'kein Fehler beim Versenden';
+                      if (err) error = err.stack;
+                      const mailLog = new MailLog({ error, reply });
+                      mailLog.save()
+                        .catch( error => console.log(error) );
                     });
 
-                    // in DB schreiben
+                    // Tag mit Urteilen in DB schreiben
                     console.log('wegschreiben!');
                     const newDay = new Day({
                       datum: tagesliste[durchgang].datum,
