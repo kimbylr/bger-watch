@@ -111,7 +111,7 @@ Config.findOne({ active: true})
                       subject: `Neue BGer-Urteile vom ${tagesliste[durchgang].datum}`,
                       html: emailBody,
                     }, (err, reply) => {
-                      console.log(err && error.stack);
+                      console.log(err && err.stack);
                       console.dir(reply);
 
                       // MailLog in DB schreiben
