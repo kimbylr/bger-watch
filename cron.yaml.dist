@@ -1,0 +1,4 @@
+cron:
+  - description: 'run'
+    url: /run?p=ENDPOINT_SECRET
+    schedule: every 6 hours

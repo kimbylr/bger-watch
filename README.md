@@ -1,15 +1,27 @@
-# BGer-watch
+# BGer-watch v2 (2022)
 
-**Zweck:** Neu veröffentlichte Urteile auf der Seite des Schweizer Bundesgerichts suchen, diese nach Thema filtern und per Mail versenden.
+Scrapes page of Swiss Bundesgericht (federal high court), parses new decisions, filters them by subject and sends an email summary.
+
+## Overview
 
 **Node.js App** (wird durch Cron job gestartet)
 
 - cheerio: einschlägige Passage im HTML herausfiltern
-- sendmail
-- mongoose: Anbindung MongoDB
+- sendet Mail via sendgrid
+- legt Mail, bearbeitete Tage und Logs in MongoDB ab
 
 **MongoDB**
 
 - Konfiguration
 - Urteile (Meta-Daten)
-- Log
+- Logs
+
+## Setup
+
+Config files:
+
+- app.yaml.dist => app.yaml (gcloud)
+- cron.yaml.dist => cron.yaml (gcloud)
+- .env.dist => .env (local)
+
+`npm i && npm run dev`

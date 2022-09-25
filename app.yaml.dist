@@ -1,0 +1,10 @@
+runtime: nodejs16
+env: standard
+instance_class: F1 # 256 MB, 0.6 GHz -- https://cloud.google.com/appengine/docs/standard
+
+env_variables:
+  DB_HOST: verymanydata.mongodb.net/something
+  DB_USER: user
+  DB_PASS: pass
+  SENDGRID_API_KEY: key
+  ENDPOINT_SECRET: secret
